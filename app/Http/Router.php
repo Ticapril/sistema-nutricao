@@ -2,7 +2,10 @@
 
 namespace App\Http;
 
-use \App\Controller\PersonController;
+use \App\Controller\StudentController;
+use \App\Controller\AssessmentController;
+use App\Model\Assessment;
+use App\Model\Student;
 
 class Router
 {
@@ -29,21 +32,42 @@ class Router
     }
     function addRoute($route): void
     {
+        $serie = [];
         $this->routes[$route] = function ($route) {
             switch ($route) {
                 case '/':
-                    echo (new PersonController())->getPersons('Listagem Alunos IMC');
+                    echo (new StudentController())->getStudents('Listagem Alunos IMC');
                     break;
                 case '/form':
                     if ($this->method === 'POST') {
-                        $_POST['altura'] = PersonController::validateFields($_POST);
-                        // echo '<pre>';
-                        // print_r($_POST['altura']);
-                        PersonController::createPerson($_POST);
-                        (new PersonController())->getPersons('Listagem Alunos IMC');
+                        $_POST['altura'] = StudentController::validateFields($_POST);
+                        StudentController::createStudent($_POST);
+                        (new StudentController())->getStudents('Listagem Alunos IMC');
                     } else
-                        PersonController::showData('Formulário Cadastro IMC', 'form');
+                        StudentController::showData('Formulário Cadastro IMC', 'form');
                     break;
+                case '/avaliar':
+                    if ($this->method === 'POST') {
+                        $stdClass = (new AssessmentController())->getDataForm($_POST['nome-aluno']);
+                        // echo '<pre>';
+                        // print_r($stdClass);
+                        // echo '</pre>';
+                        // die;
+                        $student = new Student($stdClass->id, $stdClass->nome, $stdClass->altura, $stdClass->peso);
+                        // echo '<pre>';
+                        // print_r($student);
+                        // echo '</pre>';
+                        // die;
+                        $_POST['student'] = $student;
+                        AssessmentController::createAssesment($_POST);
+                        // $_POST['altura'] = AssessmentController::validateFields($_POST);
+                        // $serie['supino-reto'] = $_POST['supino-reto'];
+                        // $serie['voador'] = $_POST['voador'];
+                        // $serie['flexao'] = $_POST['flexao'];
+                        // AssessmentController::createStudent($_POST, $serie);
+                        // (new AssessmentController())->getStudent('Listagem Alunos IMC');
+                    } else
+                        StudentController::showData('Formulário Avaliação Aluno', 'avaliar');
             }
         };
     }

@@ -4,14 +4,16 @@
 namespace App\Model;
 //model tem acesso aos dados da aplicação
 use \App\Database\Database;
+use \App\Model\Assessment;
 
 class Student
 {
     //atributos de classe definindo os tipos
     private string $id;
     private string $name;
-    private int $height;
-    private float $weight;
+    private int    $height;
+    private float  $weight;
+    private Assessment $avaliacoes;
 
     //getters
     public function getId(): string
@@ -44,6 +46,7 @@ class Student
         $this->name = $name;
         $this->height = $height;
         $this->weight = $weight;
+        // $this->serie = $serie;
     }
     //retorna o imc calculado
     public function calculateImc(): string
@@ -61,16 +64,17 @@ class Student
     //cria um novo aluno
     public function create($values): void
     {
-
-        $db = new Database();
-        $pdoObject = $db->setConnection();
-
-        $this->id = strval($db->insertData($pdoObject, $values));
+        // $pdoObject = )->setConnection();
+        $this->id = (new Database('alunos2'))->insert($values);
     }
-    public static function getPersons()
+    public static function getStudents()
     {
-        $db = new Database();
-        $connection = $db->setConnection();
-        return $db->selectData($connection);
+        $db = new Database('alunos2');
+        return $db->selectData();
+    }
+    public static function getStudent($name)
+    {
+        $db = new Database('alunos2');
+        return $db->selectDataByName('{' . $name . '}');
     }
 }

@@ -1,0 +1,101 @@
+<div class="container">
+    <h2 class="display-5 text-center mt-3">Formulário de Avaliação dos Alunos</h2>
+    <form method="POST">
+        <h3 class="text-center">Preencha as informações da avaliação</h3>
+        <div class="form-group">
+            <label>Nome Professor</label>
+            <input class="form-control" type="text" name="nome-professor" />
+        </div>
+        <div class="form-group">
+            <label>Nome Aluno</label>
+            <input class="form-control" type="text" name="nome-aluno" />
+        </div>
+        <!-- info para definir a serie -->
+        <h3 class="text-center">Preencha as informações da sua série</h3>
+        <hr>
+        <div class="row">
+            <!-- peito -->
+            <div class="col-4">
+                <h4>Peito</h4>
+                <div class=" form-check">
+                    <input class="form-check-input" type="checkbox" name="supino-reto">
+                    <label class="form-check-label">
+                        Supino reto
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="voador">
+                    <label class="form-check-label">
+                        Voador Peitoral
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="flexao">
+                    <label class="form-check-label">
+                        Flexão de Braço
+                    </label>
+                </div>
+            </div>
+            <!-- ombro -->
+            <div class="col-4">
+                <h4>Ombros</h4>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="desenvolvimento-halteres">
+                    <label class="form-check-label">
+                        Desenvolvimento com halteres
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="elevacao-lateral">
+                    <label class="form-check-label">
+                        Elevação lateral (side lateral raise)
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="encolhimento-ombros">
+                    <label class="form-check-label">
+                        Encolhimento de ombros
+                    </label>
+                </div>
+            </div>
+            <!-- triceps -->
+            <div class="col-4">
+                <h4>Triceps</h4>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="extensao-triceps-halteres">
+                    <label class="form-check-label">
+                        Extensão de tríceps com halteres
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="paralelas">
+                    <label class="form-check-label">
+                        Paralelas (dips)
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="triceps-mergulho-banco">
+                    <label class="form-check-label">
+                        Tríceps mergulho no banco (tricep bench dip)
+                    </label>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="form-group">
+            <label>Quantidade Repetições</label>
+            <input class="form-control" type="number" name="quantidade-repeticoes" />
+        </div>
+        <div class="form-group">
+            <label>Número de Series</label>
+            <input class="form-control" type="number" name="numero-series" />
+        </div>
+        <div class="form-group">
+            <label>Carga Média</label>
+            <input class="form-control" type="number" name="carga-media" />
+        </div>
+        <div class="form-group mt-3">
+            <button class="btn btn-success">Enviar</button>
+        </div>
+    </form>
+</div>

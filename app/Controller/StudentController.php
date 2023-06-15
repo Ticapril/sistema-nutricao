@@ -6,19 +6,19 @@ use \App\Model\Student;
 use \App\View\View;
 
 // O que essa classe faz?
-// essa classe vai ter acesso a model Person, vai instanciar um objeto dessa model
+// essa classe vai ter acesso a model Student, vai instanciar um objeto dessa model
 // e enviar esses dados para serem renderizados em uma view ou receber esses dados da view e utilizar a model
 // para cadastrar essa nova entidade no banco de dados
 
-class PersonController extends Page
+class StudentController extends Page
 {
-    public static function getPersonItens(): string
+    public static function getStudentItens(): string
     {
         $alunos = '';
-        $results = Student::getPersons();
+        $results = Student::getStudents();
         $results ? $alunos = '' : $alunos = '<h4 class="text-center">Não existem alunos na base de dados</h4>';
         foreach ($results as  $values) {
-            $aluno = new Student($values->id, $values->nome, $values->altura, $values->peso);
+            $aluno = new Student($values->id, $values->nome, $values->altura, $values->peso, $values->serie = []);
             $alunos .= (new View('aluno/aluno'))->getResultContent([
                 'id' => $aluno->getId(),
                 'nome' => $aluno->changeName($aluno->getName()),
@@ -29,20 +29,20 @@ class PersonController extends Page
         }
         return $alunos;
     }
-    public static function getHeaderPerson()
+    public static function getHeaderStudent()
     {
         return (new View('aluno/aluno_header'))->getResultContent();
     }
     // (pega os dados do formulário e envia via post para url /form) e cria um novo registro no banco de dados
     public static function getDataForm($postVars = []): Student
     {
-        return new Student('aluno_' . strval(uniqid()), $postVars['nome'], $postVars['altura'], $postVars['peso']);
+        return new Student('aluno_' . strval(uniqid()), $postVars['nome'], $postVars['altura'], $postVars['peso'], $postVars);
     }
-    public static function createPerson($postVars = []): void
+    public static function createStudent($postVars = []): void
     {
-        //recebe uma instancia de Person
-        $person = self::getDataForm($postVars);
-        $person->create($postVars);
+        //recebe uma instancia de Student
+        $student = self::getDataForm($postVars);
+        $student->create($postVars);
     }
     // renderiza uma página genérica ex: /form
     public static function showData($title, $viewName): void
@@ -51,14 +51,15 @@ class PersonController extends Page
         echo parent::getPage($title, $view->getResultContent());
     }
     // renderiza uma página especifica ex: /
-    public static function getPersons($title): void
+    public static function getStudents($title): void
     {
         $content = (new View('alunos'))->getResultContent([
-            'alunos' => self::getPersonItens(),
-            'header_alunos' => self::getHeaderPerson()
+            'alunos' => self::getStudentItens(),
+            'header_alunos' => self::getHeaderStudent()
         ]);
         echo parent::getPage($title, $content);
     }
+
     public static function validateFields($values): string
     {
         //PRIMEIRA VALIDAÇÃO SE QUALQUER UM DOS CAMPOS ESTIVER VAZIO REDIRECIONA PARA A PÁGINA DE FORMULARIO
@@ -83,5 +84,10 @@ class PersonController extends Page
             return $values['altura'];
         }
         return $values['altura'];
+    }
+    public static function getStudent($name)
+    {
+        $student = Student::getStudent($name);
+        return $student;
     }
 }
