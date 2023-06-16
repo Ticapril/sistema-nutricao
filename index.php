@@ -7,16 +7,10 @@ use \App\Model\Instructor;
 use \App\Utils\Validate;
 
 //Defino minha URL do projeto
-const URL = 'http://localhost/projetos/TestandoMvc';
+const URL = 'http://localhost/sistema-nutricao';
 
 //Criação do roteador
 $objRouter = new Router($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
-
-// $objInstructor = new Instructor('Gabriel', 'gb.oliveirati@gmail.com', '1234', '21965611572');
-// echo '<pre>';
-// print_r($objInstructor);
-// echo '</pre>';
-// die;
 
 //rota - /
 // $methods = array(
@@ -44,11 +38,12 @@ $methods = array(
         //validação completa desses dados
         // 1 - pente (todos os dados foram enviados?)
         // 2 - pente (o nome deve ser uma string e a altura e o peso devem ter somente numeros)
-        // echo '<pre>';
-        // print_r(isset($_POST['action']));
         if (isset($_POST['action'])) {
             $validator = new Validate();
-            echo $validator->verifyDataSend($_POST);
+            // 1 - pente (todos os dados foram enviados?)
+            // echo $validator->verifyDataSend($_POST);
+             // 2 - pente (o nome deve ser uma string e a altura e o peso devem ter somente numeros)
+             $validator->verifyTypeFields($_POST);
         }
         die;
 

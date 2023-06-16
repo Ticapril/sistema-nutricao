@@ -7,8 +7,7 @@ use \App\View\View;
 
 // O que essa classe faz?
 // essa classe vai ter acesso a model Student, vai instanciar um objeto dessa model
-// e enviar esses dados para serem renderizados em uma view ou receber esses dados da view e utilizar a model
-// para cadastrar essa nova entidade no banco de dados
+//e enviar esses dados para serem renderizados em uma view ou receber esses dados da view e utilizar a model para cadastrar essa nova entidade no banco de dados
 
 class StudentController extends Page
 {
@@ -52,14 +51,9 @@ class StudentController extends Page
     public static function showData($title, $viewName, $message)
     {
         $viewPage = new View($viewName);
-        // echo '<pre>';
-        // print_r($message);
-        // echo '</pre>';
-        // die;
         if ($message !== 'Preencha todos os dados') {
             $viewMessage = new View($message);
-
-            return parent::getPage($title, $viewPage->getResultContent(), $viewMessage->getResultContent());
+            return parent::getFormPage($title, $viewPage->getResultContent(), $viewMessage->getResultContent());
         }
         return parent::getPage($title, $viewPage->getResultContent(), '');
     }
