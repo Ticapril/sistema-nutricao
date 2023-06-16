@@ -13,7 +13,6 @@
         }
     },
     "require": {
-        "twbs/bootstrap": "5.3.0",
-        "ramsey/uuid": "^4.2"
+        "twbs/bootstrap": "5.3.0"
     }
 }

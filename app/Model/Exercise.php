@@ -2,20 +2,19 @@
 
 namespace App\Model;
 
-
 class Exercise
 {
-    private $name; // nome do exercicio
-    private $series; // quantas séries 1, 2 ou 3
-    private $repetition; // quantidade de repetições
-    private $intensity; // carga para cada repetição
-    private $volume;
+    private int    $id;
+    private string $name;
+    private int    $series;
+    private int    $repetition;
+    private int    $intensity;
+    private int    $volume;
 
     public function getVolume()
     {
         return $this->volume;
     }
-
     public function __construct($name, $series, $repetition, $intensity)
     {
         $this->name = $name;
@@ -27,5 +26,9 @@ class Exercise
     public function calculateVolume()
     {
         $this->volume = ($this->series * $this->repetition * $this->intensity);
+    }
+    public function showInfoExercise()
+    {
+        echo $this->name;
     }
 }

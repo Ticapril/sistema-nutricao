@@ -21,6 +21,7 @@ class View
 
     public function getResultContent($vars = []): string
     {
+
         $keys = array_keys($vars);
         $keys =  array_map(function ($value) {
             return '{{' . $value . '}}';

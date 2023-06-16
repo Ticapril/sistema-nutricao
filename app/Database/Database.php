@@ -3,6 +3,7 @@
 namespace App\Database;
 
 use PDO;
+use PDOException;
 
 //classe responsável por acessar ao banco de dados através de uma conexão executar métodos de insert(insere um aluno), update(edita um aluno), delete(deleta um aluno), select(exibe n alunos)
 class Database
@@ -29,21 +30,35 @@ class Database
             die($exception->getMessage());
         }
     }
-
+    public function execute($query, $params = [])
+    {
+        try {
+            $statement = $this->connection->prepare($query);
+            $statement->execute($params);
+            // echo '<pre>';
+            // print_r($statement);
+            // echo '</pre>';
+            // die;
+            return $statement;
+        } catch (PDOException $e) {
+            die('ERROR: ' . $e->getMessage());
+        }
+    }
     public function insert($values)
     {
+        //DADOS DA QUERY
         $fields = array_keys($values);
-        echo '<pre>';
-        print_r($fields);
-        echo '</pre>';
-        die;
-        $result = $this->connection->prepare("INSERT INTO" . $this->table . "(id, nome, altura, peso) VALUES (?,?,?)");
-        $result->bindValue(':id', $this->countData());
-        $result->bindValue(':nome', '{' . $fields['nome'] . '}');
-        $result->bindValue(':altura', $fields['altura']);
-        $result->bindValue(':peso', $fields['peso']);
+        $binds  = array_pad([], count($fields), '?');
+        $query = 'INSERT INTO ' . $this->table . ' (' . implode(',', $fields) . ') VALUES (' . implode(',', $binds) . ')';
+        $this->execute($query, array_values($values));
+    }
+    public function selectUserByEmail($email)
+    {
+        $query = "SELECT * FROM $this->table WHERE email = '$email'";
+
+        $result = $this->connection->prepare($query);
         $result->execute();
-        return $this->countData();
+        return $result->fetchAll(PDO::FETCH_CLASS);
     }
     public function selectData(): array
     {
@@ -60,18 +75,17 @@ class Database
         $row = $result->fetchAll(PDO::FETCH_CLASS);
         return $row;
     }
-    // //refatorar isso aqui
-    public function countData(): int
+    public function select($where = null, $order = null, $limit = null, $fields = '*')
     {
-        $result = $this->connection->prepare('SELECT * FROM alunos2');
-        $result->execute();
-        $row = $result->fetchAll(PDO::FETCH_ASSOC);
-        return count($row);
+        //DADOS DA QUERY
+        $where = strlen($where) ? 'WHERE ' . $where : '';
+        $order = strlen($order) ? 'ORDER BY ' . $order : '';
+        $limit = strlen($limit) ? 'LIMIT ' . $limit : '';
+
+        //MONTA A QUERY
+        $query = 'SELECT ' . $fields . ' FROM ' . $this->table . ' ' . $where . ' ' . $order . ' ' . $limit;
+
+        //EXECUTA A QUERY
+        return $this->execute($query);
     }
-    // public function deleteData($pdoObject)
-    // {
-    // }
-    // public function updateData($pdoObject)
-    // {
-    // }
 }

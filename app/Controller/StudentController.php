@@ -14,20 +14,24 @@ class StudentController extends Page
 {
     public static function getStudentItens(): string
     {
-        $alunos = '';
-        $results = Student::getStudents();
-        $results ? $alunos = '' : $alunos = '<h4 class="text-center">Não existem alunos na base de dados</h4>';
+        $students = '';
+        $results = Student::select();
+        echo '<pre>';
+        print_r($results);
+        echo '</pre>';
+        die;
+        $results ? $students = '' : $students = '<h4 class="text-center">Não existem students na base de dados</h4>';
         foreach ($results as  $values) {
-            $aluno = new Student($values->id, $values->nome, $values->altura, $values->peso, $values->serie = []);
-            $alunos .= (new View('aluno/aluno'))->getResultContent([
-                'id' => $aluno->getId(),
-                'nome' => $aluno->changeName($aluno->getName()),
-                'altura' => $aluno->getHeight(),
-                'peso' => $aluno->getWeight(),
-                'imc' => $aluno->calculateImc()
+            $student = new Student(intval($values->id), $values->nome, $values->altura, $values->peso, $values->serie = []);
+            $students .= (new View('aluno/aluno'))->getResultContent([
+                'id' => $student->getId(),
+                'nome' => $student->changeName($student->getName()),
+                'altura' => $student->getHeight(),
+                'peso' => $student->getWeight(),
+                'imc' => $student->calculateImc()
             ]);
         }
-        return $alunos;
+        return $students;
     }
     public static function getHeaderStudent()
     {
@@ -45,10 +49,19 @@ class StudentController extends Page
         $student->create($postVars);
     }
     // renderiza uma página genérica ex: /form
-    public static function showData($title, $viewName): void
+    public static function showData($title, $viewName, $message)
     {
-        $view = new View($viewName);
-        echo parent::getPage($title, $view->getResultContent());
+        $viewPage = new View($viewName);
+        // echo '<pre>';
+        // print_r($message);
+        // echo '</pre>';
+        // die;
+        if ($message !== 'Preencha todos os dados') {
+            $viewMessage = new View($message);
+
+            return parent::getPage($title, $viewPage->getResultContent(), $viewMessage->getResultContent());
+        }
+        return parent::getPage($title, $viewPage->getResultContent(), '');
     }
     // renderiza uma página especifica ex: /
     public static function getStudents($title): void
@@ -85,9 +98,9 @@ class StudentController extends Page
         }
         return $values['altura'];
     }
-    public static function getStudent($name)
-    {
-        $student = Student::getStudent($name);
-        return $student;
-    }
+    // public static function getStudent($where)
+    // {
+    //     $student = Student::getStudent($name);
+    //     return $student;
+    // }
 }
