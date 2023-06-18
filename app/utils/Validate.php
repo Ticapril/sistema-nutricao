@@ -17,7 +17,8 @@ class Validate
         return StudentController::showData('Formulário Cadastro IMC', 'form', 'messageTest');
     }
 
-    public function verifyTypeText($postVars = []){
+    public function verifyTypeText($postVars = [])
+    {
         //validação Nome
         $pattern = '/^(\p{L}+(?:\s\p{L}+)*)$/u';
         $result = [];

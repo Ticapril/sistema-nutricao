@@ -15,14 +15,14 @@ class Instructor extends User
     {
         $this->id = (new Database('instrutor'))->insert($values);
     }
-    public function DoAssessment($postVars = [])
-    {
-        //instanciar um aluno e buscar na base e armazenar o id dele caso encontrado?
-        // new Student()
-        //instanciar um instrutor e buscar na base e armazenar o id dele caso encontrado?
-        // new Instructor()
-        $newAssessment = new Assessment($postVars); // cria uma nova avaliação como objeto
-        $newAssessment->create($newAssessment); // seta o id da avaliação e armazena no banco de dados
-        $this->assessmentDone[] = $newAssessment;
-    }
+    // public function DoAssessment($postVars = [])
+    // {
+    //     //instanciar um aluno e buscar na base e armazenar o id dele caso encontrado?
+    //     // new Student()
+    //     //instanciar um instrutor e buscar na base e armazenar o id dele caso encontrado?
+    //     // new Instructor()
+    //     $newAssessment = new Assessment($postVars); // cria uma nova avaliação como objeto
+    //     $newAssessment->create($newAssessment); // seta o id da avaliação e armazena no banco de dados
+    //     $this->assessmentDone[] = $newAssessment;
+    // }
 }

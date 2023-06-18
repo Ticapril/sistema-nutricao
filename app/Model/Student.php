@@ -7,9 +7,9 @@ use \App\Model\Assessment;
 
 class Student extends User
 {
-    private int        $height;
-    private float      $weight;
-    private Assessment $historyAssessment;
+    public int        $height; // constante
+    public float      $weight; // varia a cada mes
+    public Assessment $historyAssessment;
 
     //retorna o imc calculado 
     public function calculateImc(): string
@@ -27,16 +27,16 @@ class Student extends User
     // criação de um novo aluno na base de dados
     public function create($values): void
     {
-        $this->id = (new Database('alunos2'))->insert($values);
+        $this->id = (new Database('usuario'))->insert($values);
     }
     // lista todos os alunos
     public static function select()
     {
-        return (new Database('alunos2'))->select();
+        return (new Database('usuario'))->select()->fetchAll();
     }
     //busca um aluno pelo id
     public static function getStudentById($where, $order)
     {
-        $db = (new Database('alunos2'))->select($where, $order);
+        $db = (new Database('usuario'))->select($where, $order);
     }
 }

@@ -9,11 +9,11 @@ use \App\Database\Database;
 
 class Assessment
 {
-    private int     $id; // depois do insert
-    private int     $instructor_id; // definido fk
-    private string  $date; // definido
-    private int     $student_id; // definido fk
-    private array   $exercises; // montar os exercicios
+    private int     $id;  // id avaliação
+    private int     $instructor_id;
+    private string  $date; // data gerada automáticamente
+    private int     $student_id; // id do aluno que vai fazer a avaliação
+    private array   $exercises; // exercicios
 
 
     public function __construct($postVars)
@@ -23,7 +23,7 @@ class Assessment
         $this->instructor_id = $postVars['nome-professor']->id;
         $this->buildSerie($postVars);
     }
-    //recebe da view /avaliar-aluno dados via Post dos exercicios para o aluno especifico
+    //monta a série
     public function buildSerie(array $postVars = [])
     {
         //removo as posições que não me interessa
@@ -43,17 +43,11 @@ class Assessment
             $this->exercises[] = new Exercise($key, $varsVolume['numero-series'], $varsVolume['quantidade-repeticoes'], $varsVolume['carga-media']);
         }
     }
-    //cria uma avaliação no banco de dados
-    public function create($values): void
+    // calcula o imc
+    public function calculateImc(): string
     {
-        $assesmentId = (new Database('avaliacao'))->insert([
-            'professor_id'     =>  $values->professor,
-            'student_id'       =>  $values->student->getId(),
-            'date'             =>  $values->date,
-        ]);
-        $this->id = $assesmentId;
+        return  round($this->weight / pow($this->height, 2) * 10000, 2);
     }
-    //só calcula sem armazenar isso em lugar algum
     public function calculateVolumeTotal()
     {
         $volumeTotal = 0;
@@ -62,4 +56,16 @@ class Assessment
         }
         return $volumeTotal;
     }
+    //cria uma avaliação no banco de dados
+    // public function create($values): void
+    // {
+    //     $assesmentId = (new Database('avaliacao'))->insert([
+    //         'professor_id'     =>  $values->professor,
+    //         'student_id'       =>  $values->student->getId(),
+    //         'date'             =>  $values->date,
+    //     ]);
+    //     $this->id = $assesmentId;
+    // }
+    //só calcula sem armazenar isso em lugar algum
+    
 }

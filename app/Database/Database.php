@@ -9,10 +9,10 @@ use PDOException;
 class Database
 {
     const  HOST     = 'localhost';
-    const  USER     = 'postgres';
-    const  PASSWORD = 'root';
-    const  PORT     = 5432;
-    const  DBNAME   = 'testandomvc';
+    const  USER     = 'root';
+    const  PASSWORD = '';
+    const  PORT     = 3306;
+    const  NAME   = 'sistema-nutricao';
     private string $table;
     private PDO $connection;
 
@@ -25,7 +25,8 @@ class Database
     public function setConnection()
     {
         try {
-            $this->connection = new PDO('pgsql:host=' . self::HOST . ';' . 'port=' . self::PORT . ';' . 'dbname=' . self::DBNAME, self::USER, self::PASSWORD);
+            $this->connection = new PDO('mysql:host='.self::HOST.';dbname='.self::NAME,self::USER,self::PASSWORD);
+            $this->connection->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
         } catch (\PDOException $exception) {
             die($exception->getMessage());
         }
@@ -35,10 +36,6 @@ class Database
         try {
             $statement = $this->connection->prepare($query);
             $statement->execute($params);
-            // echo '<pre>';
-            // print_r($statement);
-            // echo '</pre>';
-            // die;
             return $statement;
         } catch (PDOException $e) {
             die('ERROR: ' . $e->getMessage());
@@ -51,6 +48,7 @@ class Database
         $binds  = array_pad([], count($fields), '?');
         $query = 'INSERT INTO ' . $this->table . ' (' . implode(',', $fields) . ') VALUES (' . implode(',', $binds) . ')';
         $this->execute($query, array_values($values));
+        return $this->connection->lastInsertId();
     }
     public function selectUserByEmail($email)
     {

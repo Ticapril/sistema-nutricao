@@ -6,10 +6,10 @@ class Exercise
 {
     private int    $id;
     private string $name;
-    private int    $series;
-    private int    $repetition;
-    private int    $intensity;
-    private int    $volume;
+    private int    $series; // quantidade de ciclos 1,2 ou 4
+    private int    $repetition; // quantidade de repetições
+    private int    $intensity; // carga 
+    private int    $volume; // volume de treino
 
     public function getVolume()
     {

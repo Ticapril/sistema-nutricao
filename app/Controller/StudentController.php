@@ -15,26 +15,36 @@ class StudentController extends Page
     {
         $students = '';
         $results = Student::select();
-        echo '<pre>';
-        print_r($results);
-        echo '</pre>';
-        die;
-        $results ? $students = '' : $students = '<h4 class="text-center">Não existem students na base de dados</h4>';
-        foreach ($results as  $values) {
-            $student = new Student(intval($values->id), $values->nome, $values->altura, $values->peso, $values->serie = []);
-            $students .= (new View('aluno/aluno'))->getResultContent([
-                'id' => $student->getId(),
-                'nome' => $student->changeName($student->getName()),
-                'altura' => $student->getHeight(),
-                'peso' => $student->getWeight(),
-                'imc' => $student->calculateImc()
+        // echo '<pre>';
+        // print_r($results);
+        // echo '</pre>';
+        $results ? $students = '' : $students = '<h4 class="text-center">Não existem Alunos na base de dados</h4>';
+        foreach ($results as  $value) {
+            // $student = new Student(intval($values->id), $values->nome, $values->altura, $values->peso, $values->serie = []);
+            $student = new Student();
+            // echo '<pre>';
+            // print_r($value->name);
+            // echo '</pre>';
+            // die;
+            $student->id = $value['id'];
+            $student->name = $value['name'];
+            $student->cellphone = $value['cellphone'];
+            $student->email = $value['email'];
+            $student->password = $value['password'];
+            $student->isAdm = $value['isAdm'];
+         
+            $students .= (new View('aluno/aluno.html'))->getResultContent([
+                'id' => $student->id,
+                'name' => $student->name,
+                'email' => $student->email,
+                'cellphone' => $student->cellphone
             ]);
         }
         return $students;
     }
     public static function getHeaderStudent()
     {
-        return (new View('aluno/aluno_header'))->getResultContent();
+        return (new View('aluno/aluno_header.html'))->getResultContent();
     }
     // (pega os dados do formulário e envia via post para url /form) e cria um novo registro no banco de dados
     public static function getDataForm($postVars = []): Student
@@ -51,20 +61,28 @@ class StudentController extends Page
     public static function showData($title, $viewName, $message)
     {
         $viewPage = new View($viewName);
+        $header = (new View('header.php'))->getResultContent();
+        $footer = (new View('footer.php'))->getResultContent();
+        // echo '<pre>';
+        // print_r($header);
+        // echo '</pre>';
+        // die;
         if ($message !== 'Preencha todos os dados') {
             $viewMessage = new View($message);
             return parent::getFormPage($title, $viewPage->getResultContent(), $viewMessage->getResultContent());
         }
-        return parent::getPage($title, $viewPage->getResultContent(), '');
+        return parent::getPage($title, $viewPage->getResultContent(), $header, $footer);
     }
     // renderiza uma página especifica ex: /
-    public static function getStudents($title): void
+    public static function getStudents($title)
     {
-        $content = (new View('alunos'))->getResultContent([
+        $header =   (new View('header.php'))->getResultContent();
+        $footer =   (new View('footer.php'))->getResultContent();
+        $content = (new View('alunos.html'))->getResultContent([
             'alunos' => self::getStudentItens(),
             'header_alunos' => self::getHeaderStudent()
         ]);
-        echo parent::getPage($title, $content);
+        return parent::getPage($title, $content, $header, $footer);
     }
 
     public static function validateFields($values): string
